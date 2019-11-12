@@ -1,0 +1,11 @@
+ドメイン一覧をdom_listというファイルで作成した場合
+
+以下のようなスクリプトを同じ場所に設置して実行する。
+--------------------------
+#!/bin/sh
+
+for list in `cat dom_list`
+do
+ dig mx ${list} | grep MX | grep -v ^';' | awk '{print $1,$6}' >> kekka.txt
+done
+--------------------------
