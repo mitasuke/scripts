@@ -1,0 +1,29 @@
+diffコマンドの実行結果について、
+
+ファイルの内容に差異が無い場合：
+# echo $?
+0
+
+ファイルの内容に差異がある場合：
+# echo $?
+1
+
+となるので、これを利用して以下のようにする。
+
+#!/bin/sh
+
+DIR1=/usr/share/zoneinfo/UTC
+DIR2=/etc/localtime
+LOG=/data/localtime_hikaku.log
+
+echo "`/bin/date`" >> $LOG
+
+diff -q /usr/share/zoneinfo/UTC /etc/localtime > /dev/null 2>&1
+
+if [ `echo $?` -ne 0 ]
+then
+ echo "Difference,Difference,Difference,Difference." >> $LOG
+ exit 1
+fi
+
+exit 0
