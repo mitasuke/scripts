@@ -25,7 +25,7 @@ fi
 
 # 圧縮・削除
 cd ${DIR}
-for file in "${LOGFILE1}" "${LOGFILE2}" "${LOGFILE3}"
+for file in "${LOGFILE1}" "${LOGFILE2}"
 do
  ${TAR} zcpf ${file}.${DATE}.tgz ${file}.${DATE}??
  if [ -e ${file}.${DATE}.tgz ]
