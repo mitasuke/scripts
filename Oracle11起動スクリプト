@@ -1,0 +1,27 @@
+#! /bin/sh
+
+# Source function library.
+#. /etc/rc.d/init.d/functions
+
+ORACLE_HOME=/opt/oracle/product/11.2.0/db
+ORACLE=oracle
+
+case $1 in
+'start')
+        su - $ORACLE -c "$ORACLE_HOME/bin/dbstart $ORACLE_HOME"
+        ;;
+'stop')
+        su - $ORACLE -c "$ORACLE_HOME/bin/dbshut $ORACLE_HOME"
+        ;;
+*)
+        echo "usage: $0 {start|stop}"
+        exit
+        ;;
+esac
+
+exit
+
+### コメント
+-c 以降を "" で囲まない場合、 su をした後に $1 に入る引数が「$ORACLE -c ～」 になってしまい、
+それが dbstart,dbshut に渡される。
+dbstart,dbshut側では ORACLE_HOME_LISTNER に訳のわからない引数が突っ込まれてしまいエラーになる。
