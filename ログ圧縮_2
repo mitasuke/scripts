@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# コマンド
+TAR=/bin/tar
+RM=/bin/rm
+
+# ログファイル名
+###LOGFILES=('log1' 'log2' 'log3')
+LOGFILES=('server.log')
+
+# 対象ディレクトリ
+###WORKDIR=('dir1' 'dir2' 'dir3')
+WORKDIR=('/data/logs/')
+
+# 処理対象年月
+DATE=`date +%Y-%m -d '1 month ago'`
+
+# コマンドの存在確認
+if [ ! -e ${TAR} -o ! -e ${RM} ]
+ then
+  echo "tar or rm command not found." | logger
+  exit 1
+fi
+
+# 圧縮・削除
+for dir in "${WORKDIR[@]}"
+do
+ cd ${dir}
+  for file in "${LOGFILES[@]}"
+  do
+   if [ -e ${file}_${DATE}.tgz ]
+    then
+     echo "LOG is already compressed." | logger
+     exit 1
+   else
+     ${TAR} zcpf ${file}_${DATE}.tgz ${file}_${DATE}-??T??-??-??
+   fi
+
+   res=$?
+
+   if [ ${res} -eq 0 -a -e ${file}_${DATE}.tgz ]
+    then
+     ${RM} -f ${file}_${DATE}-??T??-??-??
+   fi
+  done
+done
+
+exit 0
