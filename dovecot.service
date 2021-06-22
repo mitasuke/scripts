@@ -4,10 +4,28 @@ After=syslog.target network.target
 
 [Service]
 Type = forking
-ExecStart = /usr/local/sbin/dovecot start
+ExecStart = /usr/local/sbin/dovecot -c /usr/local/etc/dovecot/dovecot.conf
 ExecStop = /usr/local/sbin/dovecot stop
 ExecReload = /usr/local/sbin/dovecot reload
-PIDFile = /usr/local/etc/dovecot/pid/dovecot.pid
 
 [Install]
 WantedBy = multi-user.target
+
+### 注意 ###
+起動はできるが、ulimit -n の設定値に関する警告が出てしまうため、設定ファイルを作って読み込ませる。
+# cd /etc/systemd/system/
+# mkdir dovecot.service.d
+# cd dovecot.service.d/
+# vi limits.conf
+-------------------
+[Service]
+LimitNOFILE=65536
+-------------------
+# systemctl status dovecot.service
+# systemctl daemon-reload
+# systemctl restart dovecot.service
+
+# cat /proc/<PID>/limits
+--------------------------------------------------------------------------
+Max open files            65536                65536                files
+--------------------------------------------------------------------------
