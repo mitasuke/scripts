@@ -1,0 +1,13 @@
+[Unit]
+Description = Dovecot Imap Server
+After=syslog.target network.target
+
+[Service]
+Type = forking
+ExecStart = /usr/local/sbin/dovecot start
+ExecStop = /usr/local/sbin/dovecot stop
+ExecReload = /usr/local/sbin/dovecot reload
+PIDFile = /usr/local/etc/dovecot/pid/dovecot.pid
+
+[Install]
+WantedBy = multi-user.target
