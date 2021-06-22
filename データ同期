@@ -1,0 +1,20 @@
+#!/bin/sh
+
+LOGFILE=/data/ikou_tmp/www_sync.log
+TARGETDIR=/data/ikou_tmp/www_target
+
+RSYNCOPT="-av --delete"
+
+DEST='同期先IPアドレス'
+
+echo "`/bin/date` : rsync start." >> $LOGFILE
+
+for dir in `cat $TARGETDIR`
+do
+ rsync $RSYNCOPT /data/www/${dir}/ root@$DEST:/data/www/${dir} >> $LOGFILE
+done
+
+echo "`/bin/date` : rsync end." >> $LOGFILE
+echo "===========================" >> $LOGFILE
+
+### www_target には同期対象のディレクトリ一覧を記載しておく。
