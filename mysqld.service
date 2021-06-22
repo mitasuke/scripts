@@ -1,0 +1,27 @@
+[Unit] 
+Description=MySQL Server 
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/sh /usr/local/mysql/bin/mysqld_safe --datadir=/data/mysql/data --pid-file=/data/mysql/data/ホスト名.pid
+ExecStop=/usr/local/mysql/bin/mysqld stop
+ExecReload=/usr/local/mysql/bin/mysqld restart
+#User=mysql
+#Group=mysql
+
+[Install]
+WantedBy=multi-user.target
+
+### おまけ ###
+ulimit も設定してみる。
+# mkdir mysqld.service.d
+# cd mysqld.service.d/
+# vi limits.conf
+-------------------
+[Service]
+LimitNOFILE=1024000
+-------------------
+# systemctl status mysqld.service
+# systemctl enable mysqld.service
+# systemctl start mysqld.service
