@@ -1,0 +1,13 @@
+#!/bin/sh
+
+MYSQLDUMP=/usr/local/mysql/bin/mysqldump
+MYSQLUSER=root
+MYSQLPASS='パスワード'
+OUTPATH=/data/mysql/backup
+GZIP=/usr/bin/gzip
+
+echo "`LANG=C /bin/date`: MySQL DUMP start."
+
+$MYSQLDUMP --single-transaction --create-options --add-drop-table --all-databases --events --force -u$MYSQLUSER -p$MYSQLPASS | $GZIP -f > $OUTPATH/all_databases.sql.gz
+
+echo "`LANG=C /bin/date`: MySQL DUMP done."
