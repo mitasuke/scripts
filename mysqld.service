@@ -5,8 +5,8 @@ After=syslog.target network.target
 [Service]
 Type=simple
 ExecStart=/bin/sh /usr/local/mysql/bin/mysqld_safe --datadir=/data/mysql/data --pid-file=/data/mysql/data/ホスト名.pid
-#ExecStop=/usr/local/mysql/bin/mysqld stop
-#ExecReload=/usr/local/mysql/bin/mysqld restart
+#ExecStop=/usr/local/mysql/bin/mysqld stop　★これがあると正常に停止できない
+#ExecReload=/usr/local/mysql/bin/mysqld restart　★なくても正常にrestartできる
 #User=mysql
 #Group=mysql
 
