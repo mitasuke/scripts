@@ -1,0 +1,40 @@
+空白行なしのユーザー一覧を作る。
+
+SET HEAD OFF
+select USERNAME from DBA_USERS order by USERNAME;
+
+上記の結果をExcelのQ列に貼り付ける。（昇順）
+
+ExcelのA列に以下を記載する。
+-------------------------------------------------
+="select OWNER,TABLE_NAME,GRANTEE,PRIVILEGE,GRANTABLE,HIERARCHY from DBA_TAB_PRIVS where OWNER = '"&Q1&"' order by TABLE_NAME,GRANTEE;"
+-------------------------------------------------
+列下方向にコピーしてやればおしまい。
+
+　→オブジェクト所有者,オブジェクト名,権限付与されているアカウント,GRANTABLE,HIERARCHY が出る。
+
+スクリプト作成
+
+# su - oracle
+$ cd /tmp
+
+$ vi g_count.sh
+------------------------------------------------
+sqlplus -S /nolog <<EOF
+connect / as sysdba
+SET HEAD OFF
+SET COLSEP ','
+SET LINESIZE 300
+SET FEEDBACK OFF
+SPOOL /tmp/g_count_tmp.txt
+
+～SQL文が大量に並ぶ～
+
+SPOOL OFF
+SET HEAD ON
+quit
+EOF
+grep -v -e '^$' /tmp/g_count_tmp.txt | grep -v 'SQL>' > /tmp/g_count.txt
+sed -i -e 's/ //g' /tmp/g_count.txt
+rm /tmp/g_count_tmp.txt
+------------------------------------------------
