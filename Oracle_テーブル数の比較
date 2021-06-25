@@ -1,0 +1,14 @@
+2サーバで実行して比較する。
+
+sqlplus -S /nolog <<EOF
+connect / as sysdba
+SET HEAD OFF
+SET COLSEP ','
+SPOOL /tmp/table_count.txt
+SELECT OWNER,COUNT(*) FROM DBA_TABLES GROUP BY OWNER ORDER BY OWNER;
+SPOOL OFF
+SET HEAD ON
+quit
+EOF
+grep -v -e '^$' /tmp/table_count.txt | grep -v 'SQL>' > /tmp/table_count.txt
+sed -i -e 's/ //g' /tmp/table_count.txt
